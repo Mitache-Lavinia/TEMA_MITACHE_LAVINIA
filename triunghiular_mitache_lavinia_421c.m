@@ -8,7 +8,7 @@ x=1.5*sawtooth(t1*w,0.6)-0.5 %generarea semnalului triunghiular amplitudinea
 %cu 1 iar cel de minim cu -2
  %s=slewrate(x,1/0.002)
  subplot(3,1,1)
- plot(t1,s*x)
+ plot(t1,x)
  axis([0 30 -2  1.2])
 
 
