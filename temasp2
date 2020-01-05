@@ -1,0 +1,40 @@
+N = 50; % numarul de coeficienti
+D = 15; % durata
+P = 40; % perioada
+F=1/P; % frecventa 
+w0=2*pi/P; % pulsatia
+duty=37.5 %factorul de umplere calculat cu formula D/P*100
+t = -1.5 * P:0.1:1.5 * P;
+CC = 1 / P * integral(f, 0, P); % calculul coeficientilor componentei continue
+coeficienti = zeros(1,N); % vector de coeficineti SFC
+A = zeros(1,N); % vector de coeficienti SFA
+
+Semnal_Dreptunghiular = square( w0 * t, duty); % semnalul initial 
+
+Semnal_Initial = @(t,k) square( w0 * t, duty).*exp( -1j * k * w0 * t); % semnal initial descompus in SFC
+Semnal_Reconstruit = 0;
+
+componenta_continua = (1 / T) * integral(@(t) Semnal_Initial(t,0),0,T); % componenta continua a semnalului
+
+for k = 1:1:50
+    coeficienti(k) = (1 / T) * integral(@(t) Semnal_Initial(t,k - 25 ),0,T);
+    Semnal_Reconstruit = Semnal_Reconstruit + coeficienti(k) * exp( 1j * (k - 25) * w0 * t);
+end
+% in for calculam coeficientii SFC si reconstruim semnalul prin insumarea fiecarui termen
+
+A(1) = abs(componenta_continua);
+
+for k = 1:N
+      A(k+1) = 2 * abs(coeficienti(k)); 
+      %calculam coeficientii Seriei Fourier Armonice care vor reprezenta amplitudinile din spectru
+end 
+
+figure(1);
+plot(t, Semnal_Reconstruit, t, Semnal_Dreptunghiular);
+
+figure(2);
+stem([0:N] * w0, A), title('Spectrul semnalului Dreptunghiular');
+% reprezentam A in functie de frecventa fundamentala * numarul coeficientului corespunzator
+%conform SF, orice semnal poate fi scris ca o suma infinita de sinusuri si cosinusuri de diferite frecvente
+%semnalul reconstruit are aproape aceeasi forma ca si semnalul original, avand cateva diferente
+%aceasta diferenta poate fi diminuata prin cresterea numarului de coeficienti din SF
