@@ -6,6 +6,7 @@ F=1/P; % frecventa
 w0=2*pi/P; % pulsatia
 duty=37.5 %factorul de umplere calculat cu formula D/P*100
 t = -P:0.2:P;  
+%t este un vector ce contine valori de la -40 la 40 cu pasul 0.2
 
 coeficienti = zeros(1,N); % vector de coeficineti SFC
 A = zeros(1,N); % vector de coeficienti SFA
